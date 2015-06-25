@@ -19,6 +19,8 @@
 @property (nonatomic, strong) NSString *desc;
 @property (nonatomic) BOOL buildable;
 
+@property (nonatomic, strong) NSArray *actions;
+
 @property (nonatomic, strong) NSArray *builds;
 @property (nonatomic, strong) FTAPIJobDetailBuildDataObject *lastBuild;
 @property (nonatomic, strong) FTAPIJobDetailBuildDataObject *lastCompletedBuild;

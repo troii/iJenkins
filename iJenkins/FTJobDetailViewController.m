@@ -32,7 +32,7 @@
     [self.navigationItem setRightBarButtonItem:edit];
 }
 
-- (void)createAllElements {
+- (void)createAllElements { 
     [super createAllElements];
     
     [self createBuildNowButton];
@@ -43,6 +43,14 @@
 
 - (void)buildThis {
     FTAPIJobBuildDataObject *buildObject = [[FTAPIJobBuildDataObject alloc] initWithJobName:_job.name];
+    if (_job.jobDetail.actions != nil && _job.jobDetail.actions.count > 0) {
+        NSDictionary *actions = _job.jobDetail.actions.firstObject;
+        NSArray *parameterDefinitions = actions[@"parameterDefinitions"];
+        if (parameterDefinitions != nil && parameterDefinitions.count > 0) {
+            NSDictionary *parameterDefinition = parameterDefinitions.firstObject;
+            buildObject.parameter = [NSArray arrayWithObject: [NSDictionary dictionaryWithObjectsAndKeys:parameterDefinition[@"name"], @"name", parameterDefinition[@"defaultParameterValue"][@"value"], @"value", nil]];
+        }
+    }
     [FTAPIConnector connectWithObject:buildObject andOnCompleteBlock:^(id<FTAPIDataAbstractObject> dataObject, NSError *error) {
         [self createBuildNowButton];
         if (error) {

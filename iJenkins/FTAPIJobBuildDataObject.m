@@ -23,7 +23,11 @@
 }
 
 - (NSDictionary *)payloadData {
-    return nil;
+    if (_parameter != nil && _parameter.count > 0) {
+        return @{@"parameter": _parameter};
+    } else {
+        return nil;
+    }
 }
 
 - (void)processData:(NSDictionary *)data {

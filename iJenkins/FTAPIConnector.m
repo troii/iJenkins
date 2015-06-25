@@ -183,8 +183,10 @@ static FTAccount *_sharedAccount = nil;
 - (NSData *)processDictionaryIntoDataPayload:(NSDictionary *)dictionary {
     NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:dictionary];
     NSError *err;
-    NSData *dataPayload = [NSJSONSerialization dataWithJSONObject:d options:NSJSONWritingPrettyPrinted error:&err];
-    return dataPayload;
+    NSMutableData *payload = [NSMutableData data];
+    [payload appendData: [@"json=" dataUsingEncoding:NSUTF8StringEncoding]];
+    [payload appendData: [NSJSONSerialization dataWithJSONObject:d options:NSJSONWritingPrettyPrinted error:&err]];
+    return payload;
 }
 
 - (NSURLRequest *)requestForDataObject:(id <FTAPIDataAbstractObject>)data {
@@ -226,7 +228,6 @@ static FTAccount *_sharedAccount = nil;
     [request setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"] forHTTPHeaderField:@"X-AppBundleIdentifier"];
     
     if ([data httpMethod] == FTHttpMethodPost || [data httpMethod] == FTHttpMethodPut) {
-        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         if (payload) {
             NSData *dataPayload = [self processDictionaryIntoDataPayload:payload];
             [request setHTTPBody:dataPayload];

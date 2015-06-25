@@ -42,6 +42,8 @@
     _desc = data[@"description"];
     _buildable = [data[@"buildable"] boolValue];
     
+    _actions = data[@"actions"];
+    
     NSInteger count = [data[@"builds"] count];
     if (count > 0) {
         int x = 0;
